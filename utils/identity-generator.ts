@@ -49,15 +49,14 @@ const lastNames = [
 export const randomIdentity = () => {
   const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
   const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
-  const username = `${slugify(firstName.toLowerCase())}.${slugify(
+  const username = `}`;
+  const email = `${slugify(firstName.toLowerCase())}.${slugify(
     lastName.toLowerCase()
-  )}`;
-  const email = `${username}@maildrop.cc`;
+  )}@maildrop.cc`;
   const phone = "0123456789";
   return {
     firstName,
     lastName,
-    username,
     email,
     phone,
   };

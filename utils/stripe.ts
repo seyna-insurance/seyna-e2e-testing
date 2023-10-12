@@ -16,8 +16,4 @@ export const stripe_pay = async (
     .getByPlaceholder("Full name on card")
     .fill(`${firstName} ${lastName}`);
   await page.getByTestId("hosted-payment-submit-button").click();
-
-  await page
-    .getByText("Votre souscription a bien été prise en compte")
-    .waitFor();
 };

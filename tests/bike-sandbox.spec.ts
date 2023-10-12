@@ -5,7 +5,7 @@ import { stripe_pay } from "../utils/stripe";
 import { maildrop_goto_inbox } from "../utils/maildrop";
 
 test("test", async ({ context, page }) => {
-  const { firstName, lastName, username, email, phone } = randomIdentity();
+  const { firstName, lastName, email, phone } = randomIdentity();
 
   await page.goto(
     "https://journey.seyna.eu/sandboxed/start/1c678290-fa45-4b93-b53e-06ac5087429f"
@@ -46,5 +46,9 @@ test("test", async ({ context, page }) => {
 
   await stripe_pay(page, firstName, lastName, email);
 
-  await maildrop_goto_inbox(context, username);
+  await page
+    .getByText("Votre souscription a bien été prise en compte")
+    .waitFor();
+
+  await maildrop_goto_inbox(context, email);
 });
