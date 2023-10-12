@@ -1,9 +1,9 @@
 import { test } from "@playwright/test";
-import { randomIdentity } from "./identity-generator";
-
-const { firstName, lastName, username, email, phone } = randomIdentity();
+import { randomIdentity } from "../utils/identity-generator";
 
 test("test", async ({ context, page }) => {
+  const { firstName, lastName, username, email, phone } = randomIdentity();
+
   await page.goto(
     "https://journey.seyna.eu/sandboxed/start/1c678290-fa45-4b93-b53e-06ac5087429f"
   );
