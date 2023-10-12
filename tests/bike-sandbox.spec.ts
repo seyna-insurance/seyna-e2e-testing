@@ -1,5 +1,8 @@
 import { test } from "@playwright/test";
 import { randomIdentity } from "../utils/identity-generator";
+import { yousign_sign } from "../utils/yousign";
+import { stripe_pay } from "../utils/stripe";
+import { maildrop_goto_inbox } from "../utils/maildrop";
 
 test("test", async ({ context, page }) => {
   const { firstName, lastName, username, email, phone } = randomIdentity();
@@ -38,39 +41,10 @@ test("test", async ({ context, page }) => {
   await page.getByRole("button", { name: "Continuer" }).click();
   await page.getByRole("checkbox").check();
   await page.getByRole("button", { name: "Continuer" }).click();
-  await page.waitForSelector('iframe[title="Signature page"]');
 
-  await page
-    .frameLocator('iframe[title="Signature page"]')
-    .locator("#main div[data-document-index] + p")
-    .scrollIntoViewIfNeeded();
+  await yousign_sign(page);
 
-  await page
-    .frameLocator('iframe[title="Signature page"]')
-    .getByRole("button", { name: "Signer" })
-    .click();
-  await page
-    .frameLocator('iframe[title="Signature page"]')
-    .getByText(
-      `${firstName} ${lastName}Glissez ou maintenez Entrée pour signerGlisser pour signerVous allez signerSi`
-    )
-    .press("Enter", { delay: 3000 })
-    .catch(() => {});
-  await page.getByLabel("Email").fill(email);
-  await page
-    .getByPlaceholder("1234 1234 1234 1234")
-    .fill("4242 4242 4242 42422");
-  await page.getByPlaceholder("MM / YY").fill("02 / 42");
-  await page.getByPlaceholder("CVC").fill("242");
-  await page
-    .getByPlaceholder("Full name on card")
-    .fill(`${firstName} ${lastName}`);
-  await page.getByTestId("hosted-payment-submit-button").click();
+  await stripe_pay(page, firstName, lastName, email);
 
-  await page
-    .getByText("Votre souscription a bien été prise en compte")
-    .waitFor();
-
-  const mailbox = await context.newPage();
-  await mailbox.goto(`https://maildrop.cc/inbox/?mailbox=${username}`);
+  await maildrop_goto_inbox(context, username);
 });
