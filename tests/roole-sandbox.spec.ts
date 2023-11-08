@@ -83,9 +83,10 @@ test("Second journey", async ({ context, page }) => {
     .locator("#root_address-option-0")
     .getByText("10 Rue du Lac")
     .click();
-  await page.getByLabel("Email *").click();
+
   await page.getByLabel("Email *").fill(email);
   await page.locator('input[type="tel"]').fill(phone);
+  await page.getByText("Non").click();
   await page.getByRole("button", { name: "Continuer" }).click();
   await page.getByRole("checkbox").check();
   await page.getByRole("button", { name: "Continuer" }).click();
