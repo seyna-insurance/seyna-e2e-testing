@@ -1,6 +1,7 @@
 import { Page } from "@playwright/test";
 
 export const yousign_sign = async (page: Page) => {
+  await page.getByRole("button", { name: "Signer mon contrat avec yousign" }).click();
   await page.waitForSelector('iframe[title="Signature page"]');
   await page
     .frameLocator('iframe[title="Signature page"]')

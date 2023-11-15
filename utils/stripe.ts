@@ -6,6 +6,8 @@ export const stripe_pay = async (
   lastName: string,
   email: string
 ) => {
+  await page.getByRole("button", { name: "Passer au paiement" }).click();
+  await page.getByRole("button", { name: "Ajouter mon moyen de paiement" }).click();
   await page.getByLabel("Email").fill(email);
   await page
     .getByPlaceholder("1234 1234 1234 1234")
