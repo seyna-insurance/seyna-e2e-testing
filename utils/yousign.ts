@@ -1,7 +1,7 @@
 import { Page } from "@playwright/test";
 
 export const yousign_sign = async (page: Page) => {
-  await page.waitForSelector('iframe[title="Signature page"]');
+  
   await page
     .frameLocator('iframe[title="Signature page"]')
     .locator("#main div[data-document-index] + p")
