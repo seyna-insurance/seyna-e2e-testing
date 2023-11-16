@@ -42,7 +42,13 @@ test("first journey", async ({ context, page }) => {
   await page.getByRole("checkbox").check();
   await page.getByRole("button", { name: "Continuer" }).click();
 
+  await page.getByRole("button", { name: "Signer mon contrat avec yousign" }).click();
+  await page.waitForSelector('iframe[title="Signature page"]');
+
   await yousign_sign(page);
+
+  await page.getByRole("button", { name: "Passer au paiement" }).click();
+  await page.getByRole("button", { name: "Ajouter mon moyen de paiement" }).click();
 
   await stripe_pay(page, firstName, lastName, email);
 
@@ -88,7 +94,14 @@ test("Second journey", async ({ context, page }) => {
   await page.getByRole("button", { name: "Continuer" }).click();
   await page.getByRole("checkbox").check();
   await page.getByRole("button", { name: "Continuer" }).click();
+
+  await page.getByRole("button", { name: "Signer mon contrat avec yousign" }).click();
+  await page.waitForSelector('iframe[title="Signature page"]');
+
   await yousign_sign(page);
+
+  await page.getByRole("button", { name: "Passer au paiement" }).click();
+  await page.getByRole("button", { name: "Ajouter mon moyen de paiement" }).click();
 
   await stripe_pay(page, firstName, lastName, email);
 
@@ -128,8 +141,14 @@ test('third journey', async ({context, page }) => {
   await page.getByRole('checkbox').check();
   await page.getByRole('button', { name: 'Continuer' }).click();
 
+  await page.getByRole("button", { name: "Signer mon contrat avec yousign" }).click();
+  await page.waitForSelector('iframe[title="Signature page"]');
+
   await yousign_sign(page);
 
+  await page.getByRole("button", { name: "Passer au paiement" }).click();
+  await page.getByRole("button", { name: "Ajouter mon moyen de paiement" }).click();
+  
   await stripe_pay(page, firstName, lastName, email);
 
   await page.getByRole("button", { name: "Récapitulatif" }).click();
