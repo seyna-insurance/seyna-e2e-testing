@@ -1,5 +1,8 @@
 name: Playwright Tests
-on: [push, pull_request]
+on: push
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -9,11 +12,11 @@ jobs:
       with:
         node-version: 18
     - name: Install dependencies
-      run: npm ci
+      run: yarn install --frozen-lockfile
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Run Playwright tests
-      run: npx playwright test --retry=3
+      run: npx playwright test --retries=3 --workers=2
     - uses: actions/upload-artifact@v3
       if: always()
       with:
