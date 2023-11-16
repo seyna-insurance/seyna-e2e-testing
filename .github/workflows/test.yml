@@ -13,7 +13,7 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Run Playwright tests
-      run: npx playwright test --retry=3
+      run: npx playwright test --retries=3
     - uses: actions/upload-artifact@v3
       if: always()
       with:
