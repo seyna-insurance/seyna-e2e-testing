@@ -43,7 +43,6 @@ test("first journey", async ({ context, page }) => {
   await page.getByRole("button", { name: "Continuer" }).click();
 
   await page.getByRole("button", { name: "Signer mon contrat avec yousign" }).click();
-  await page.waitForSelector('iframe[title="Signature page"]');
 
   await yousign_sign(page);
 
@@ -96,7 +95,6 @@ test("Second journey", async ({ context, page }) => {
   await page.getByRole("button", { name: "Continuer" }).click();
 
   await page.getByRole("button", { name: "Signer mon contrat avec yousign" }).click();
-  await page.waitForSelector('iframe[title="Signature page"]');
 
   await yousign_sign(page);
 
