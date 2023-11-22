@@ -4,6 +4,7 @@ import { yousign_sign } from "../utils/yousign";
 import { stripe_pay } from "../utils/stripe";
 import { maildrop_goto_inbox } from "../utils/maildrop";
 import {join} from "node:path";
+import { upload } from "../utils/upload";
 
 test("test", async ({ context, page }) => {
   const { firstName, lastName, email, phone } = randomIdentity();
@@ -11,9 +12,9 @@ test("test", async ({ context, page }) => {
   await page.goto('https://journey.seyna.eu/sandboxed/start/d26e1232-ee2c-4d5a-ab36-f7169fa086ce');
   await page.getByRole('button', { name: 'Continuer' }).click();
   await page.getByLabel('Rallye Terre & Course de Côte').click();
-  await page.getByRole('option', { name: 'VHC supérieur à 3 jours' }).click();
+  await page.getByRole('option', { name: 'Rallye Terre & Course de Côte' }).click();
   await page.getByLabel('​', { exact: true }).click();
-  await page.getByRole('option', { name: 'VHC de type "Long" (+ de 3j)' }).click();
+  await page.getByRole('option', { name: 'Rallye National < 120 kms' }).click();
   await page.getByLabel("Nom de l’évènement *").fill('24h');
   await page.getByLabel('​', { exact: true }).click();
   await page.getByRole('option', { name: 'Non' }).click();
@@ -21,18 +22,18 @@ test("test", async ({ context, page }) => {
   await page.getByPlaceholder('DD/MM/YYYY').nth(1).fill("30/12/2023");
   await page.getByRole('button', { name: 'Continuer' }).click();
   await page.getByLabel('Qui est le propriétaire', {exact: false}).fill(lastName);
-  await page.getByLabel('Alfa Romeo').click();
-  await page.getByRole('option', { name: 'BMW' }).click();
+  await page.getByLabel('Alpine').click();
+  await page.getByRole('option', { name: 'Alpine' }).click();
   await page.getByLabel('​', { exact: true }).click();
-  await page.getByRole('option', { name: '2002' }).click();
-  await page.getByLabel('Valeur totale du véhicule').fill('100000');
-  await page.getByLabel('Année de fabrication', {exact: false}).fill('2000');
-  await page.getByLabel("N° de châssis", {exact: false}).fill('FR42');
+  await page.getByRole('option', { name: 'A110 Rallye RGT' }).click();
+  await page.getByLabel('Valeur totale du véhicule').fill('150000');
+  await page.getByLabel('Année de fabrication', {exact: false}).fill('1996');
+  await page.getByLabel("N° de châssis", {exact: false}).fill('TYYU');
   await page.getByRole('button', { name: 'Continuer' }).click();
   await page.getByLabel('​', { exact: true }).click();
-  await page.getByRole('option', { name: '20 000 €' }).click();
+  await page.getByRole('option', { name: '80 000 €' }).click();
   await page.getByLabel('​', { exact: true }).click();
-  await page.getByRole('option', { name: '35 000 €' }).click();
+  await page.getByRole('option', { name: '150 000 €' }).click();
   await page.getByRole('button', { name: 'Continuer' }).click();
   await page.getByLabel('Nom du pilote *', { exact: true }).fill(lastName);
   await page.getByLabel('Prénom du pilote *').fill(firstName);
@@ -60,13 +61,8 @@ test("test", async ({ context, page }) => {
   await page.getByRole('button', { name: 'Continuer' }).click();
   await page.getByRole('button', { name: "Ajouter un carte nationale", exact: false }).click();
   
-  const fileChooserPromise  = page.waitForEvent('filechooser');
-  await page.getByText('importez-les depuis votre périphérique').click();
+  await upload(page, ['sample.pdf']);
 
-  const fileChooser = await fileChooserPromise;
-  await fileChooser.setFiles(join(__dirname, '../uploads/sample.pdf'));
-
-  await page.getByRole('button', { name: 'Fermer' }).click();
   await page.getByRole('button', { name: 'Continuer' }).click();
 await page.getByRole("checkbox").nth(1).check();
   await page.getByRole('button', { name: 'Continuer' }).click();
@@ -82,7 +78,7 @@ await page.getByRole("checkbox").nth(1).check();
   await stripe_pay(page, firstName, lastName, email);
   
   await page.getByRole('button', { name: "Récapitulatif" }).click();
-  await page.getByText("Merci pour votre confiance").waitFor();
+  await page.getByText("Merci").waitFor();
 
   await maildrop_goto_inbox(context, email);
 });
