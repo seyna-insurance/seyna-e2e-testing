@@ -3,7 +3,6 @@ import { randomIdentity } from "../utils/identity-generator";
 import { yousign_sign } from "../utils/yousign";
 import { stripe_pay } from "../utils/stripe";
 import { maildrop_goto_inbox } from "../utils/maildrop";
-import {join} from "node:path";
 import { upload } from "../utils/upload";
 
 test("test", async ({ context, page }) => {
